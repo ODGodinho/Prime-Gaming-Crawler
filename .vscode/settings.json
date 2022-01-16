@@ -1,0 +1,8 @@
+{
+    "conventionalCommits.scopes": [
+        "Types",
+        "Readme",
+        "Packages",
+        "Context"
+    ]
+}
