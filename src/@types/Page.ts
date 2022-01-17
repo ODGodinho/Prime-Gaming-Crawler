@@ -1,4 +1,3 @@
-import { PageContract as PageContractEssentials } from "@odg/essentials-crawler-node/@types/Page";
-/*§PageImport§*/
+import { Page } from 'playwright';
 
-export type PageContract = PageContractEssentials /*&*/ /*§Page§*/;
+export type PageContract = Page;

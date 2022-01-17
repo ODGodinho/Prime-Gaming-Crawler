@@ -18,7 +18,7 @@ class Browser<BrowserType extends BrowserTypeContract<PageType>, PageType extend
 
     protected browserOptions(): BrowserLaunchOptionsContract {
         return {
-            headless: false,
+            headless: Boolean(Number(process.env.HEADLESS) || false),
             args: [
                 "--wm-window-animations-disabled",
                 "--no-sandbox",
@@ -32,7 +32,7 @@ class Browser<BrowserType extends BrowserTypeContract<PageType>, PageType extend
     async initBrowser() {
         if (process.env.PERSISTENT_BROWSER && this.browserType.launchPersistentContext) {
             this.browser = null;
-            this.persistentContext = await this.browserType.launchPersistentContext(process.env.PERSISTENT_BROWSER, {});
+            this.persistentContext = await this.browserType.launchPersistentContext(process.env.PERSISTENT_BROWSER, this.browserOptions());
             return;
         }
         this.browser = await this.browserType.launch(this.browserOptions());
