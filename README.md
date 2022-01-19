@@ -51,7 +51,7 @@
 
 This is an example, the project is responsible for recovering the free games on amazon gaming and saving the keys in `game-codes.csv` or automatically rescuing the games
 
-![Amazon Get Game](./images/AmazonGaming.gif)
+<img src="./images/AmazonGaming.gif" alt="Amazon Get Game" width="100%" />
 
 ## 🖥 Libraries
 
