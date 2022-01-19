@@ -1,35 +1,38 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/ODGodinho"><img src="images/Stanley.jpg" alt="Stanley Imagem" width="500"/></a>
+  <a href="https://github.com/ODGodinho"><img src="images/Stanley.jpg" alt="Stanley Imagem" width="300"/></a><br>
+  <a href="https://github.com/ODGodinho"><img src="images/PrimeGaming.png" alt="Stanley Imagem" width="150"/></a>
   <br>
-  Stanley Crawler By Dragons Gamers
+  Prime Gaming Crawler By Dragons Gamers
   <br>
 </h1>
 
-<h4 align="center">Template Stanley typescript for crawler/web-scraping playwright or puppeteer 🤖🚀!</h4>
+<h4 align="center">Using the Stanley typescript for crawler/web-scraping playwright or puppeteer 🤖🚀!</h4>
 
 <p align="center">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/ODGodinho/Happy-ReactJs">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/ODGodinho/Prime-Gaming-Crawler">
 
   <a href="https://www.linkedin.com/in/victor-alves-odgodinho/">
     <img alt="Made by ODGodinho" src="https://img.shields.io/badge/made%20by-ODGodinho-%2304D361">
   </a>
 
-  <a href="https://github.com/ODGodinho/Stanley-Crawler-node/commits/master">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ODGodinho/Stanley-Crawler-node">
+  <a href="https://github.com/ODGodinho/Prime-Gaming-Crawler/commits/master">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ODGodinho/Prime-Gaming-Crawler">
   </a>
 
   <img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
 
-   <a href="https://github.com/ODGodinho/Stanley-Crawler-node/stargazers">
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/ODGodinho/Stanley-Crawler-node?style=social">
+   <a href="https://github.com/ODGodinho/Prime-Gaming-Crawler/stargazers">
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/ODGodinho/Prime-Gaming-Crawler?style=social">
   </a>
 
 </p>
 
 ## Table of Contents
 
+-   [Presentation](#-presentation)
+    -   [Diagram Page](#diagram-page)
 -   [Libraries](#-libraries)
 -   [Dependencies](#-dependencies)
 -   [Installing and Updating](#installing-or-updating)
@@ -38,18 +41,17 @@
 -   [Variables Info](#variables-info)
 -   [Project Diagram](#project-diagram)
     -   [Diagram Page](#diagram-page)
--   [Project Patterns](#project-patterns)
-    -   [Page Pattern](#page-patterns)
-        -   [Start Methods Rules](#start-methods-rules)
-        -   [Optional Action in Page](#optional-action-in-page)
-    -   [Controllers Patterns](#controllers-patterns)
-    -   [Selectors Patterns](#selectors-patterns)
-    -   [Handlers Patterns](#handlers-patterns)
-        -   [Handlers Rules](#handlers-rules)
 
 <br />
 
 ---
+
+
+## 💿 Presentation
+
+This is an example, the project is responsible for recovering the free games on amazon gaming and saving the keys in `game-codes.csv` or automatically rescuing the games
+
+![Amazon Get Game](./images/AmazonGaming.gif)
 
 ## 🖥 Libraries
 
@@ -66,7 +68,7 @@
 
 #### `Crawler`
 
--   [Node.js](https://nodejs.org) 14 or later
+-   [Node.js](https://nodejs.org) 16 or later
 -   [Yarn](https://yarnpkg.com/) Optional/Recommended
 
 <br>
@@ -77,13 +79,13 @@
 
 ### Install
 
-To install use this template project and clone repository,
+1. First you need to install the [Dependencies](#-dependencies)
+2. Copy `.env.example` file and create `.env` file
+3. Configure `.env` file
+    - `PERSISTENT_BROWSER` if configured, your browser will be used, otherwise use the browser on the robot and login and password will be required
+    - `USER_LOGIN` AND `USER_PASSWORD` required only if `PERSISTENT BROWSER` is empty, or if you want to renew your login automatically
 
-> remember to install all dependencies before starting this process.
 
-```bash
-bash ./start.bash
-```
 
 ## Start Project
 
@@ -115,210 +117,5 @@ yarn debug
 
 The following example shows how it was implemented with google search
 
-![Stanley-Crawler-Diagram-Page.png](./images/Stanley-Crawler-Diagram-Page.png)
+> Diagram is not available
 
-
-## Project Patterns
-
-### Page Patterns
-
-Page Object Model is a common pattern that introduces abstractions over web app pages to simplify interactions with them in multiple tests. It is best explained by an example.
-
-> now with some adaptations
-
--   > Pages names must end with Page
-
-```typescript
-import { PageContract } from "../../../@types/Page";
-import BasePage from "../BasePage";
-
-class GoogleSearchPage<PageType extends PageContract> extends BasePage<PageType> {
-    /**
-     * $s = current page selectors
-     */
-    public readonly $s = this.$$s.GoogleSearchSelector;
-
-    /**
-     * the start method is used to start all steps referring to this page
-     */
-    public async start(): Promise<this> {
-        await this.goto();
-        await this.fillSearch();
-        await this.pressEnter();
-        return this;
-    }
-
-    public async goto() {
-        return this.page.goto(this.$s.GOOGLE_HOME_URL);
-    }
-
-    public async fillSearch() {
-        const value = (Math.random() + 1).toString(36).substring(2, 18);
-        return this.page.type(this.$s.SEARCH_INPUT, value);
-    }
-
-    public async pressEnter() {
-        return this.page.keyboard.press("Enter");
-    }
-}
-
-export default GoogleSearchPage;
-```
-
-#### Start Methods Rules
-
--   Only function calls are allowed
--   Must always return current class
--   Methods used by start must be public
--   Methods must always return the result of the last executed promise
-
-#### Optional Action in Page
-
-If you have any execution that is optional or your process cannot be terminated in case of error we strongly recommend the following pattern.
-
-> Dont use try/catch, .catch(() => {}) on start is more elegant and visible
-
-```typescript
-
-    public async start(): Promise<this> {
-        ...
-        await this.clickAcceptCookie().catch(() => (/* Call log function if need */));
-        ...
-    }
-
-```
-
-### Controllers Patterns
-
-Controller are responsible for defining the order that pages and handlers will be called.
-
-> Controllers names must end with Controller
-
-```typescript
-import "colors";
-import Instances from "../../@types/Instances";
-import { PageContract } from "../../@types/Page";
-import GoogleSelectionHandler from "../Handlers/Selection/GoogleSelectionHandler";
-import initInstances from "../Pages/Pages";
-
-class ExampleGoogleCrawlerController {
-    /**
-     * Current Page instance playwright/puppeteer
-     */
-    public page: PageContract;
-
-    /**
-     * all instances are saved in this object.
-     *
-     * @NOTE: use it to avoid recursive import loop
-     */
-    public $i: Instances<PageContract>;
-
-    /**
-     * You can create a baseController if you need to.
-     */
-    constructor(page: PageContract) {
-        this.page = page;
-        this.$i = initInstances(this.page);
-    }
-
-    public async exampleSearch(): Promise<void> {
-        const GoogleSearch = await this.$i.GoogleSearchPage.start();
-
-        const HandlerSearch = new GoogleSelectionHandler<PageContract>(GoogleSearch);
-        await HandlerSearch.start();
-
-        const GoogleSelect = await this.$i.SearchSelectionPage.start();
-        console.log("Current Result:".bgCyan.black, GoogleSelect.firstElement);
-    }
-}
-
-export default ExampleGoogleCrawlerController;
-```
-
-### Selectors Patterns
-
-Selectors have some predetermined suffix rules, with them it is possible to understand selectors easily
-
-> Selectors names must end with Selector
-
-```typescript
-/**
- * By declaring the constant it is possible to retrieve the redis/database selectors if it is convenient for your project
- *
- * @NOTE: create the Types file right here if you need
- */
-const GoogleSelectionEmptySelector = {
-    NOT_RESULT_ELEMENT: "#search div[role='heading']",
-};
-
-export default GoogleSelectionEmptySelector;
-```
-
-### Handlers Patterns
-
-Handlers are used when we need to make decisions, when an action can return more than 1 different result, a practical example would be the login can return (logged in, Incorrect password, Forbidden)
-
-A simple example to show how we can use them properly
-
-```typescript
-import { PageContract } from "../../../@types/Page";
-import BaseHandler, { HandlerFunction, HandlerState } from "../BaseHandler";
-
-class GoogleSelectionHandler<PageType extends PageContract> extends BaseHandler<PageType> {
-    public identifyHandler(): Promise<HandlerFunction> {
-        return Promise.race([this.identifyLoginCompleted(), this.identifyLoginForbidden(), this.identifyLoginFail()]);
-    }
-
-    public async defaultTimeout(): Promise<number> {
-        return 30000;
-    }
-
-    private async identifyLoginCompleted() {
-        return this.page
-            .waitForSelector(this.$$s.LoginSelector.LOGIN_COMPLETED_ELEMENT, { timeout: await this.defaultTimeout() })
-            .then(() => this.resolvedSolution.bind(this)); // resolvedSolution continue the process normally
-    }
-
-    private async identifyLoginForbidden() {
-        return this.page
-            .waitForSelector(this.$$s.LoginSelector.LOGIN_FORBIDDEN_ELEMENT, { timeout: await this.defaultTimeout() })
-            .then(() => this.forbiddenSolution.bind(this));
-    }
-
-    private async identifyLoginFail() {
-        return this.page
-            .waitForSelector(this.$$s.LoginSelector.LOGIN_FAIL_ELEMENT, { timeout: await this.defaultTimeout() })
-            .then(() => this.retryLoginSolution.bind(this));
-    }
-
-    private async forbiddenSolution() {
-        throw new Error("User Blocked");
-    }
-
-    /**
-     * When returning Verify in the handler it will be executed again to verify the new status, in this case as we re-try to log in we need to know what the new status is.
-     */
-    private async retryLoginSolution() {
-        await this.page.goBack();
-        await this.$i.LoginPage.start();
-        return HandlerState.VERIFY;
-    }
-
-    public async start(): Promise<any> {
-        const solution = await this.identifyHandler();
-        return this.runSolution(solution);
-    }
-}
-
-export default GoogleSelectionHandler;
-```
-
-#### Handlers Rules
-
--   It should always contain a promise.race to identify which case it fell into
--   Cases must return the function for Run Solution to execute
--   functions with solutions must have the suffix Solution
--   Promise.Race functions must have the identify prefix
--   Define a number of attempts for your handler because if it has any HandlerState.VERIFY it will run in a loop until it falls into another condition
--   Handler should be used to handle "Not Happy" cases
