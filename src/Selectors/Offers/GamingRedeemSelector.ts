@@ -3,6 +3,7 @@ const GamingRedeemSelector = {
     REDEEM_CARDS: {
         OFFERS: "[data-a-target='loot-card']",
         REDEEM_BUTTON: "[data-test-selector='AvailableButton']",
+        REDEEM_EXTERNAL_BUTTON: "[data-test-selector='ExternalClaimCTALink']",
     },
     REDEEM_MODAL: {
         MODAL_ELEMENT: "[data-test-selector='Modal']",

@@ -16,8 +16,13 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     public async start(): Promise<this> {
         await this.waitLoadRedeem().catch(() => { });
         await this.loadFirstRedeem();
+        await this.closeModalRedeem().catch(() => { });
         await this.clickRedeem();
         return this;
+    }
+
+    public async closeModalRedeem() {
+        return this.page.click(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON, { timeout: 150 });
     }
 
     public async loadFirstRedeem() {

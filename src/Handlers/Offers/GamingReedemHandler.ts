@@ -11,11 +11,17 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
             this.identifySuccess(),
             this.identifyLoginError(),
             this.identifyContinueButton(),
+            this.identifyExternalRedeem(),
         ]);
     }
 
     public async defaultTimeout(): Promise<number> {
         return 5000;
+    }
+
+    public async identifyExternalRedeem() {
+        return this.page.waitForSelector(this.$$s.GamingRedeemSelector.REDEEM_CARDS.REDEEM_EXTERNAL_BUTTON, { timeout: await this.defaultTimeout() })
+            .then(() => { throw new Error("External Redeem not supported;"); });
     }
 
     private async identifyModalSuccess() {
@@ -56,7 +62,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
         await this.saveTokenIfExists().catch((err) => {
             console.log("Save Token error".red, err);
         });
-        await this.page.click(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON, { timeout: 500 }).catch(() => { });
+        await this.$i.GamingRedeemPage.closeModalRedeem().catch(() => {})
         return HandlerState.COMPLETED;
     }
 
@@ -66,7 +72,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
     }
 
     public async start(): Promise<any> {
-        const solution = await this.identifyHandler().catch(() => {});
+        const solution = await this.identifyHandler();
         return this.runSolution(solution);
     }
 
