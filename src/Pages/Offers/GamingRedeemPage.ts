@@ -22,7 +22,7 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     }
 
     public async closeModalRedeem() {
-        return this.page.click(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON, { timeout: 150 });
+        return (await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON))?.click({ timeout: 1000 });
     }
 
     public async loadFirstRedeem() {

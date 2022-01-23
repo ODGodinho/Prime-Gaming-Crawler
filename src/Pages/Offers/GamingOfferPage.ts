@@ -20,6 +20,7 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
     public async start(): Promise<this> {
         await this.goto();
         await this.waitOffersLoad();
+        await this.scrollAllOffers().catch(() => { });
         await this.loadOffers();
         await this.countOffers();
         await this.clickOffer();
@@ -28,6 +29,21 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public async waitOffersLoad() {
         return this.page.waitForSelector(this.$s.OFFERS_CARDS.OFFERS);
+    }
+
+    public async scrollAllOffers() {
+        const offer = this.page.locator(this.$s.OFFERS_CARDS.OFFERS);
+
+        const numberOfferPerRow = 4;
+        const numberOfLineToSkip = 4;
+        let offerPosition = numberOfferPerRow;
+
+        while (true) {
+            offerPosition += numberOfferPerRow * numberOfLineToSkip;
+            var current = offer.nth(offerPosition);
+            if (!await current.isVisible()) break;
+            await current.scrollIntoViewIfNeeded();
+        }
     }
 
     public async goto() {
@@ -45,6 +61,7 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
         if (!this.currentOffer) throw new Error("Offers not available");
 
         this.offersAvailable = await this.currentOffer.count();
+        console.log("Offers available: " + this.offersAvailable);
     }
 
     public async clickOffer() {
