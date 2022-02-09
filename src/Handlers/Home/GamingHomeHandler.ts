@@ -23,12 +23,12 @@ class GamingHomeHandler<PageType extends PageContract> extends BaseHandler<PageT
 
     private async identifyLogged() {
         return this.page.waitForSelector(this.$$s.GamingHomeSelector.LOGGED_ELEMENT, { timeout: await this.defaultTimeout() })
-        .then(() => this.resolvedSolution.bind(this));
+            .then(() => this.resolvedSolution.bind(this));
     }
 
     private async identifyRedeemPending() {
         return this.page.waitForSelector(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON, { timeout: await this.defaultTimeout() })
-        .then(() => this.redeemPendingSolution.bind(this));
+            .then(() => this.redeemPendingSolution.bind(this));
     }
 
     private async redeemPendingSolution() {
@@ -39,8 +39,7 @@ class GamingHomeHandler<PageType extends PageContract> extends BaseHandler<PageT
     private async loginSolution() {
         await this.page.click(this.$$s.GamingHomeSelector.USER_LOGIN_BUTTON);
         await this.$i.GamingLoginPage.start();
-        await this.page.waitForLoadState("networkidle");
-        return HandlerState.COMPLETED;
+        return HandlerState.VERIFY;
     }
 
     public async start(): Promise<any> {
