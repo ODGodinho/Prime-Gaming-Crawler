@@ -7,6 +7,7 @@ import GamingLoginPage from '../Pages/Login/GamingLoginPage';
 import GamingHomePage from '../Pages/Home/GamingHomePage';
 import GamingOfferPage from '../Pages/Offers/GamingOfferPage';
 import GamingRedeemPage from '../Pages/Offers/GamingRedeemPage';
+import GamingOpenOfferPage from "../Pages/Offers/GamingOpenOfferPage";
 
 export default interface Instances<PageType extends PageContract> extends InstancesEssentials<PageType> {
     GoogleSearchPage: GoogleSearchPage<PageType>;
@@ -16,5 +17,6 @@ export default interface Instances<PageType extends PageContract> extends Instan
     GamingHomePage: GamingHomePage<PageType>;
     GamingLoginPage: GamingLoginPage<PageType>;
     GamingOfferPage: GamingOfferPage<PageType>;
+    GamingOpenOfferPage: GamingOpenOfferPage<PageType>;
     GamingRedeemPage: GamingRedeemPage<PageType>;
 }

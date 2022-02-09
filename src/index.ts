@@ -1,14 +1,16 @@
 import Browser from './Context/Browser';
-import { Page, BrowserType, chromium } from 'playwright';
+import { BrowserType, chromium } from 'playwright';
 import ContextEssentials from '@odg/essentials-crawler-node/Context/Context';
 import Context from './Context/Context';
 import { config } from 'dotenv';
 import GamingController from './Controllers/GamingController';
 import { BrowserContextOptionsContract } from './@types/Context';
+import { PageContract } from './@types/Page';
 config();
 
-const browser = new Browser<BrowserType, Page>(chromium, Context as typeof ContextEssentials);
-let page: Page;
+const browser = new Browser<BrowserType, PageContract>(chromium, Context as typeof ContextEssentials);
+let page: PageContract;
+
 browser.initBrowser()
     .then(async () => {
         const context = await browser.newContext({
@@ -29,5 +31,6 @@ browser.initBrowser()
                 path: "./current-state.json"
             }).catch(() => { });
         }
+        await browser.browser?.close();
         process.exit();
     });
