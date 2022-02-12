@@ -7,7 +7,9 @@
   "author": "Dragons Gamers",
   "license": "MIT",
   "scripts": {
-    "prod": "tsc && node ./dist/index.js",
+    "build": "tsc",
+    "prod": "node ./dist/index.js",
+    "qa": "yarn build && node ./dist/index.js",
     "debug": "tsc && set DEBUG=pw:api && node ./dist/index.js"
   },
   "devDependencies": {
