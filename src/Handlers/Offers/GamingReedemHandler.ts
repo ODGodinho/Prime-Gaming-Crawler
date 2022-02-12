@@ -89,7 +89,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
 
     public async start(): Promise<any> {
         const solution = await this.identifyHandler();
-        return this.runSolution(solution)
+        return this.runSolution(solution);
     }
 
 }

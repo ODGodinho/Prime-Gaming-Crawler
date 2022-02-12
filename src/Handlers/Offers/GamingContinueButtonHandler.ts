@@ -22,10 +22,12 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
     public async identifyHandler(): Promise<any> {
         await this.loadButtonState();
         switch (this.continueButtonState) {
+            case 0:
+                return this.clickFirstStepSolution.bind(this);
             case 1:
-                return this.clickFirstButtonStep.bind(this);
+                return this.clickSecondStepSolution.bind(this);
             case 2:
-                return this.clickLastButtonStep.bind(this);
+                return this.clickLastStepSolution.bind(this);
         }
     }
 
@@ -33,12 +35,18 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
         return 5000;
     }
 
-    public async loadButtonState() {
+    private async loadButtonState() {
         this.continueButtonState = await this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.MODAL_ELEMENT)
             .locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_STATE_POSITION_ELEMENTS).count();
     }
 
-    public async clickFirstButtonStep() {
+    public async clickFirstStepSolution() {
+        await this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.MODAL_ELEMENT)
+            .locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_BUTTON)
+            .click().catch(() => { });
+    }
+
+    public async clickSecondStepSolution() {
         if (this.firstButtonExecuted) throw "Error in continue button handler";
 
         await Promise.all([
@@ -50,7 +58,7 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
         return HandlerState.VERIFY;
     }
 
-    public async clickLastButtonStep() {
+    public async clickLastStepSolution() {
         await this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.MODAL_ELEMENT)
             .locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_BUTTON)
             .click().catch(() => { });
@@ -59,7 +67,7 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
 
     public async start(): Promise<any> {
         const solution = await this.identifyHandler();
-        return this.runSolution(solution)
+        return this.runSolution(solution);
     }
 
 }
