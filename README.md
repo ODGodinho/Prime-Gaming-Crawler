@@ -31,16 +31,18 @@
 
 ## Table of Contents
 
--   [Presentation](#-presentation)
-    -   [Diagram Page](#diagram-page)
--   [Libraries](#-libraries)
--   [Dependencies](#-dependencies)
--   [Installing and Updating](#installing-or-updating)
-    -   [Install](#install)
--   [Start Project](#start-project)
--   [Variables Info](#variables-info)
--   [Project Diagram](#project-diagram)
-    -   [Diagram Page](#diagram-page)
+- [Table of Contents](#table-of-contents)
+- [💿 Presentation](#-presentation)
+- [🖥 Libraries](#-libraries)
+    - [`Crawler`](#crawler)
+- [📁 Dependencies](#-dependencies)
+    - [`Crawler`](#crawler-1)
+- [Installing Or Updating](#installing-or-updating)
+  - [Install](#install)
+- [Start Project](#start-project)
+- [Variables Info](#variables-info)
+- [Project Diagram](#project-diagram)
+  - [Diagram Page](#diagram-page)
 
 <br />
 
@@ -83,8 +85,9 @@ This is an example, the project is responsible for recovering the free games on 
 2. Copy `.env.example` file and create `.env` file
 3. Configure `.env` file
     - `PERSISTENT_BROWSER` if configured, your browser will be used, otherwise use the browser on the robot and login and password will be required
-    - `USER_LOGIN` AND `USER_PASSWORD` required only if `PERSISTENT BROWSER` is empty, or if you want to renew your login automatically
-
+    - `USER_LOGIN` AND `USER_PASSWORD` required only if you want to log in automatically
+    - `BROWSER_PATH` configure with your browser path, otherwise internal browser will be used,
+4. if you use `PERSISTENT_BROWSER` you will probably have to set `BROWSER_PATH` and `HEADLESS=1`
 
 
 ## Start Project
@@ -94,6 +97,14 @@ First install dependencies with the following command
 ```bash
 yarn install
 ```
+
+Now you need to build your code.
+
+```bash
+yarn build
+```
+
+> you should do this every time you modify a file or update with the newest version
 
 now run the following command to start
 
