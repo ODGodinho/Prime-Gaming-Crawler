@@ -1,9 +1,19 @@
 import { HandlerState } from '@odg/essentials-crawler-node/Handlers/BaseHandler';
 import { appendFile } from 'fs';
+import Instances from "../../@types/Instances";
 import { PageContract } from '../../@types/Page';
+import BasePage from "../../Pages/BasePage";
 import BaseHandler from '../BaseHandler';
+import GamingContinueButtonHandler from "./GamingContinueButtonHandler";
 
 export default class GamingRedeemHandler<PageType extends PageContract> extends BaseHandler<PageType> {
+
+    public mainInstances: Instances<PageType>;
+
+    constructor(page: BasePage<PageType>, mainInstances: Instances<PageType>) {
+        super(page);
+        this.mainInstances = mainInstances;
+    }
 
     public identifyHandler(): any {
         return Promise.race([
@@ -31,15 +41,21 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
 
     private async identifyContinueButton() {
         return this.page.waitForSelector(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_BUTTON, { timeout: await this.defaultTimeout() })
-            .then(() => () => { throw new Error("Continue button not supported"); });
+            .then(() => this.continueButtonSolution.bind(this));
+    }
+
+    private async continueButtonSolution() {
+        await (new GamingContinueButtonHandler(this.basePage, this.mainInstances)).start();
+        return HandlerState.VERIFY;
     }
 
     private async identifySuccess() {
-        const fakePromise = new Promise(() => {});
-        if (!this.$i.GamingOfferPage.currentOffer) throw new Error("Current offer is not available");
+        const fakePromise = new Promise(() => { });
+        if (!this.mainInstances.GamingOfferPage.currentOffer) throw new Error("Current offer is not available");
         if (!this.page.url().match(this.$$s.GamingRedeemSelector.REDEEM_REGEXP)) await fakePromise;
 
-        const exists = await this.$i.GamingOfferPage.currentOffer.nth(this.$i.GamingOfferPage.position).isVisible({ timeout: await this.defaultTimeout() });
+        await this.$i.GamingOfferPage.loadOffers();
+        const exists = await this.$i.GamingOfferPage.currentOffer?.nth(this.mainInstances.GamingOfferPage.position).isVisible({ timeout: await this.defaultTimeout() });
 
         if (!exists) await fakePromise;
 
@@ -49,7 +65,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
     private async saveTokenIfExists() {
         if (!(await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.GAME_TOKEN))) return console.log("not has token");
 
-        const code = await this.page.inputValue(this.$$s.GamingRedeemSelector.REDEEM_MODAL.GAME_TOKEN, { timeout: 500 });
+        const code = await this.page.inputValue(this.$$s.GamingRedeemSelector.REDEEM_MODAL.GAME_TOKEN, { timeout: 1000 });
         const game = await this.page.$eval(this.$$s.GamingRedeemSelector.REDEEM_GAME_NAME_ELEMENT, (el: any) => el.innerText, {});
 
         appendFile("./game-codes.csv", `"${game}";"${code}"\r\n`, (err) => {
@@ -62,7 +78,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
         await this.saveTokenIfExists().catch((err) => {
             console.log("Save Token error".red, err);
         });
-        await this.$i.GamingRedeemPage.closeModalRedeem().catch(() => {})
+        await this.$i.GamingRedeemPage.closeModalRedeem().catch(() => { })
         return HandlerState.COMPLETED;
     }
 
@@ -73,7 +89,7 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
 
     public async start(): Promise<any> {
         const solution = await this.identifyHandler();
-        return this.runSolution(solution);
+        return this.runSolution(solution)
     }
 
 }

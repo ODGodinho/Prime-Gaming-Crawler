@@ -1,5 +1,5 @@
 
-import { Locator } from 'playwright-core';
+import { Locator, Page } from 'playwright-core';
 import { PageContract } from '../../@types/Page';
 import BasePage from '../BasePage';
 
@@ -13,6 +13,8 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public offersAvailable: number = 0;
 
+    public popup?: Page;
+
     public constructor(page: PageType) {
         super(page);
     }
@@ -23,7 +25,7 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
         await this.scrollAllOffers().catch(() => { });
         await this.loadOffers();
         await this.countOffers();
-        await this.clickOffer();
+        await this.clickCloseModalIfOpen();
         return this;
     }
 
@@ -64,15 +66,9 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
         console.log("Offers available: " + this.offersAvailable);
     }
 
-    public async clickOffer() {
-        if (!this.currentOffer) throw new Error("Offers not available");
-
-        if (!this.offersAvailable)
-            return true;
-
-        await this.page.click(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON, { timeout: 500 }).catch(() => { })
-
-        return this.currentOffer.nth(this.position++).click({ timeout: 5000 });
+    public async clickCloseModalIfOpen() {
+        const modal = await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON);
+        return modal?.click().catch(() => { });
     }
 
     public async nextStep(): Promise<BasePage<PageType> | null> {

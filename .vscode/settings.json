@@ -4,6 +4,9 @@
         "Readme",
         "Packages",
         "Context",
-        "Feature"
+        "Feature",
+        "Redeem",
+        "Offer",
+        "Login"
     ]
 }

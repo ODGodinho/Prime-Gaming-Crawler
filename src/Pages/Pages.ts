@@ -4,6 +4,7 @@ import BasePage from './BasePage';
 import GamingHomePage from './Home/GamingHomePage';
 import GamingLoginPage from './Login/GamingLoginPage';
 import GamingOfferPage from './Offers/GamingOfferPage';
+import GamingOpenOfferPage from "./Offers/GamingOpenOfferPage";
 import GamingRedeemPage from './Offers/GamingRedeemPage';
 import GoogleSearchPage from './Search/GoogleSearchPage';
 import GoogleSelectionEmptyPage from './Selection/GoogleSelectionEmptyPage';
@@ -18,6 +19,7 @@ export default function initInstances(page: PageContract): Instances<PageContrac
         GamingLoginPage: new GamingLoginPage<PageContract>(page),
         GamingHomePage: new GamingHomePage<PageContract>(page),
         GamingOfferPage: new GamingOfferPage<PageContract>(page),
+        GamingOpenOfferPage: new GamingOpenOfferPage<PageContract>(page),
         GamingRedeemPage: new GamingRedeemPage<PageContract>(page),
     };
     Object.values(pages).forEach((instance: BasePage<PageContract>) => instance.setInstances(pages));
