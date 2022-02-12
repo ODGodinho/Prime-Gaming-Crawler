@@ -59,7 +59,7 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
 
     public async start(): Promise<any> {
         const solution = await this.identifyHandler();
-        await this.runSolution(solution)
+        return this.runSolution(solution)
     }
 
 }

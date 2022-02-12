@@ -37,7 +37,7 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     public async clickRedeem() {
         if (!this.currentOffer) throw new Error("Current Redeem not available");
 
-        if (!await this.currentOffer.count()) return false;
+        if (!await this.currentOffer.count()) throw new Error("No offers available");
 
         return this.currentOffer.first().click();
     }

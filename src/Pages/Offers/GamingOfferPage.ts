@@ -20,9 +20,8 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
     }
 
     public async start(): Promise<this> {
-        await this.goto();
         await this.waitOffersLoad();
-        await this.scrollAllOffers().catch(() => { });
+        await this.scrollAllOffers().catch(() => {});
         await this.loadOffers();
         await this.countOffers();
         await this.clickCloseModalIfOpen();
@@ -35,16 +34,18 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public async scrollAllOffers() {
         const offer = this.page.locator(this.$s.OFFERS_CARDS.OFFERS);
+        const footer = this.page.locator(this.$s.OFFERS_CARDS.FOOTER_ELEMENT);
 
         const numberOfferPerRow = 4;
-        const numberOfLineToSkip = 4;
+        const numberOfLineToSkip = 2;
         let offerPosition = numberOfferPerRow;
 
         while (true) {
             offerPosition += numberOfferPerRow * numberOfLineToSkip;
             var current = offer.nth(offerPosition);
+            await current.scrollIntoViewIfNeeded({ timeout: 2500 }).catch(() => { });
+            await footer.scrollIntoViewIfNeeded({ timeout: 2500 }).catch(() => { });
             if (!await current.isVisible()) break;
-            await current.scrollIntoViewIfNeeded();
         }
     }
 
