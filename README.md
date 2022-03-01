@@ -109,7 +109,7 @@ yarn build
 now run the following command to start
 
 ```bash
-yarn prod
+yarn start
 # or
 yarn debug
 ```
