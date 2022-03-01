@@ -34,10 +34,11 @@ class GamingController {
 
                 const GamingRedeem = new GamingRedeemHandler(RedeemStep, this.$i);
                 await GamingRedeem.start();
-            } catch (error) {
-                console.log("Error get Game".red, error);
+            } catch (error: any) {
+                const message = Number(process.env.DEBUG) ? error : error.message;
+                console.log("Error get Game".red, message);
             }
-            await OfferStep.popup?.close().catch(() => {});
+            await OfferStep.popup?.close().catch(() => { });
         } while (OfferStep.position < OfferStep.offersAvailable);
 
         console.log("Finish".bgCyan.black);

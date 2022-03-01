@@ -47,7 +47,7 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
     }
 
     public async clickSecondStepSolution() {
-        if (this.firstButtonExecuted) throw "Error in continue button handler";
+        if (this.firstButtonExecuted) throw new Error("Error in continue button handler");
 
         await Promise.all([
             this.page.waitForNavigation(),

@@ -9,6 +9,10 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
 
     public currentOffer?: Locator;
 
+    public currentRansoms?: Locator;
+
+    public currentMobileOffer?: Locator;
+
     public constructor(page: PageType) {
         super(page);
     }
@@ -26,8 +30,11 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     }
 
     public async loadFirstRedeem() {
-        this.currentOffer = this.page.locator(this.$s.REDEEM_CARDS.OFFERS)
+        this.currentRansoms = this.page.locator(this.$s.REDEEM_CARDS.OFFERS)
+        this.currentOffer = this.currentRansoms
             .locator(this.$s.REDEEM_CARDS.REDEEM_BUTTON);
+        this.currentMobileOffer = this.currentRansoms
+            .locator(this.$s.REDEEM_CARDS.REDEEM_MOBILE_BUTTON);
     }
 
     public async waitLoadRedeem() {
@@ -35,11 +42,28 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     }
 
     public async clickRedeem() {
-        if (!this.currentOffer) throw new Error("Current Redeem not available");
+        if (!this.currentOffer || !this.currentRansoms) throw new Error("Current Redeem not available");
 
-        if (!await this.currentOffer.count()) throw new Error("No offers available");
+        await this.throwIfOnlyMobile();
+        await this.throwIfNoDefaultOffer();
 
         return this.currentOffer.first().click();
+    }
+
+    private async throwIfOnlyMobile() {
+        if (!this.currentOffer || !this.currentMobileOffer) throw new Error("Current Redeem not available");
+
+        if (await this.currentMobileOffer.count() && !await this.currentOffer.count()) {
+            throw new Error("Mobile offers not supported");
+        }
+    }
+
+    private async throwIfNoDefaultOffer() {
+        if (!this.currentOffer || !this.currentMobileOffer) throw new Error("Current Redeem not available");
+
+        if (!await this.currentMobileOffer.count() && !await this.currentOffer.count()) {
+            throw new Error("Not offers available");
+        }
     }
 
     public async nextStep(): Promise<BasePage<PageType> | null> {
