@@ -5,6 +5,7 @@ import { BrowserContract } from '../@types/Browser';
 import { BrowserContextContract } from '../@types/Context';
 import { BrowserTypeContract } from '../@types/Browser';
 import { PageContract } from '../@types/Page';
+import { appendFile, existsSync } from "fs";
 
 class Browser<BrowserType extends BrowserTypeContract<PageType>, PageType extends PageContract> extends BrowserEssentials<BrowserType, PageType, typeof ContextEssentials> {
 
@@ -56,7 +57,14 @@ class Browser<BrowserType extends BrowserTypeContract<PageType>, PageType extend
         };
     }
 
+    public async createCurrentState(): Promise<void> {
+        if (!existsSync("./current-state.json")) {
+            appendFile("./current-state.json", "[]", () => { });
+        }
+    }
+
     async initBrowser() {
+        await this.createCurrentState();
         if (process.env.PERSISTENT_BROWSER && this.browserType.launchPersistentContext) {
             this.browser = null;
             this.persistentContext = await this.browserType.launchPersistentContext(process.env.PERSISTENT_BROWSER, this.browserOptions());
