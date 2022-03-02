@@ -1,4 +1,5 @@
 import 'colors';
+import { appendFile } from "fs";
 import { Page } from "playwright-core";
 import Instances from '../@types/Instances';
 import { PageContract } from '../@types/Page';
@@ -36,10 +37,16 @@ class GamingController {
                 await GamingRedeem.start();
             } catch (error: any) {
                 const message = Number(process.env.DEBUG) ? error : error.message;
-                console.log("Error get Game".red, message);
+                const gameName = this.$i.GamingOfferPage.currentGameName || "";
+
+                console.log(`\n${gameName}`.red, message);
+                appendFile("./game-errors.csv", `"${gameName}";"${error.message}"\r\n`, (err: any) => {
+                    if (!err) return;
+                    return true;
+                });
             }
             await OfferStep.popup?.close().catch(() => { });
-        } while (OfferStep.position < OfferStep.offersAvailable);
+        } while (OfferStep.position < OfferStep.totalOffers);
 
         console.log("Finish".bgCyan.black);
     }

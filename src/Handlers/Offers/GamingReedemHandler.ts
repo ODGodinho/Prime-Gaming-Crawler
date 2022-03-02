@@ -51,11 +51,11 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
 
     private async identifySuccess() {
         const fakePromise = new Promise(() => { });
-        if (!this.mainInstances.GamingOfferPage.currentOffer) throw new Error("Current offer is not available");
+        if (!this.mainInstances.GamingOfferPage.Offers) throw new Error("Current offer is not available");
         if (!this.page.url().match(this.$$s.GamingRedeemSelector.REDEEM_REGEXP)) await fakePromise;
 
         await this.$i.GamingOfferPage.loadOffers();
-        const exists = await this.$i.GamingOfferPage.currentOffer?.nth(this.mainInstances.GamingOfferPage.position).isVisible({ timeout: await this.defaultTimeout() });
+        const exists = await this.$i.GamingOfferPage.currentOffer?.isVisible({ timeout: await this.defaultTimeout() });
 
         if (!exists) await fakePromise;
 

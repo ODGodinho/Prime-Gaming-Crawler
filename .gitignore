@@ -3,3 +3,4 @@ dist/
 .env
 current-state.json
 game-codes.csv
+game-errors.csv

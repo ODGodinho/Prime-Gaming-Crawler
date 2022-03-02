@@ -7,11 +7,19 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public readonly $s = this.$$s.GamingOfferSelector;
 
+    public Offers?: Locator;
+
     public currentOffer?: Locator;
+
+    public currentGameName?: string;
 
     public position: number = 0;
 
+    public OffersButtons?: Locator;
+
     public offersAvailable: number = 0;
+
+    public totalOffers: number = 0;
 
     public popup?: Page;
 
@@ -21,7 +29,7 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public async start(): Promise<this> {
         await this.waitOffersLoad();
-        await this.scrollAllOffers().catch(() => {});
+        await this.scrollAllOffers().catch(() => { });
         await this.loadOffers();
         await this.countOffers();
         await this.clickCloseModalIfOpen();
@@ -56,14 +64,18 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
     }
 
     public async loadOffers() {
-        this.currentOffer = this.page.locator(this.$s.OFFERS_CARDS.OFFERS)
+        this.Offers = this.page.locator(this.$s.OFFERS_CARDS.OFFERS);
+        this.OffersButtons = this.Offers
             .locator(this.$s.OFFERS_CARDS.REDEEM_BUTTON);
     }
 
     public async countOffers() {
-        if (!this.currentOffer) throw new Error("Offers not available");
+        if (!this.OffersButtons || !this.Offers) throw new Error("Offers not available");
 
-        this.offersAvailable = await this.currentOffer.count();
+        this.totalOffers = await this.Offers.count();
+        console.log("Total Offers: " + this.totalOffers);
+
+        this.offersAvailable = await this.OffersButtons.count();
         console.log("Offers available: " + this.offersAvailable);
     }
 
