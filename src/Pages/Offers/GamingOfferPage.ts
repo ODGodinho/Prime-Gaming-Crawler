@@ -23,6 +23,8 @@ export default class GamingOfferPage<PageType extends PageContract> extends Base
 
     public popup?: Page;
 
+    public gamesNames: Array<string> = [];
+
     public constructor(page: PageType) {
         super(page);
     }
