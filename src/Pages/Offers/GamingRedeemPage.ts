@@ -20,13 +20,12 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
     public async start(): Promise<this> {
         await this.waitLoadRedeem().catch(() => { });
         await this.loadFirstRedeem();
-        await this.closeModalRedeem().catch(() => { });
         await this.clickRedeem();
         return this;
     }
 
     public async closeModalRedeem() {
-        return (await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON))?.click({ timeout: 1000 });
+        return (await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CLOSE_BUTTON))?.click({ timeout: 2000 });
     }
 
     public async loadFirstRedeem() {
@@ -47,7 +46,10 @@ export default class GamingRedeemPage<PageType extends PageContract> extends Bas
         await this.throwIfOnlyMobile();
         await this.throwIfNoDefaultOffer();
 
-        return this.currentOffer.first().click();
+        await this.closeModalRedeem().catch(() => { });
+        await this.currentOffer.first().click({ timeout: 2000 }).catch(() => { });
+
+        return true;
     }
 
     private async throwIfOnlyMobile() {
