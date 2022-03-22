@@ -36,8 +36,9 @@ export default class GamingContinueButtonHandler<PageType extends PageContract> 
     }
 
     private async loadButtonState() {
-        this.continueButtonState = await this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.MODAL_ELEMENT)
-            .locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_STATE_POSITION_ELEMENTS).count();
+        const progress = this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.MODAL_ELEMENT)
+            .locator(this.$$s.GamingRedeemSelector.REDEEM_MODAL.CONTINUE_STATE_POSITION_ELEMENTS);
+        this.continueButtonState = await progress.count();
     }
 
     public async clickFirstStepSolution() {
