@@ -5,6 +5,7 @@ import Instances from '../@types/Instances';
 import { PageContract } from '../@types/Page';
 import GamingHomeHandler from '../Handlers/Home/GamingHomeHandler';
 import GamingRedeemHandler from '../Handlers/Offers/GamingReedemHandler';
+import GamingRedeemOrModalOfferHandler from "../Handlers/Offers/GamingRedeemOrModalOfferHandler";
 import GamingOfferPage from "../Pages/Offers/GamingOfferPage";
 import initInstances from '../Pages/Pages';
 
@@ -31,9 +32,10 @@ class GamingController {
             try {
                 await this.$i.GamingOpenOfferPage.start();
                 this.$popup = this.loadPopupOrMainInstances(OfferStep);
-                const RedeemStep = await this.$popup.GamingRedeemPage.start();
+                const OfferToReedem = new GamingRedeemOrModalOfferHandler(this.$popup.GamingHomePage, this.$popup);
+                await OfferToReedem.start();
 
-                const GamingRedeem = new GamingRedeemHandler(RedeemStep, this.$i);
+                const GamingRedeem = new GamingRedeemHandler(this.$popup.GamingOpenOfferPage, this.$i);
                 await GamingRedeem.start();
             } catch (error: any) {
                 const message = Number(process.env.DEBUG) ? error : error.message;

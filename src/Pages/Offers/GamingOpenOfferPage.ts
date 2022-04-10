@@ -33,15 +33,13 @@ export default class GamingOpenOfferPage<PageType extends PageContract> extends 
     }
 
     private async getIfValidOffer(currentOffer: Locator): Promise<Locator | false> {
-        if (await currentOffer.locator(this.$s.OFFERS_CARDS.REDEEM_BUTTON).count()) {
-            this.$i.GamingOfferPage.currentGameName = await currentOffer
-                .locator(this.$s.OFFERS_CARDS.GAME_NAME).getAttribute("aria-label") || "";
+        this.$i.GamingOfferPage.currentGameName = await currentOffer
+            .locator(this.$s.OFFERS_CARDS.GAME_NAME).first().getAttribute("aria-label") || "";
 
-            if (!this.$i.GamingOfferPage.gamesNames.includes(this.$i.GamingOfferPage.currentGameName)) {
-                this.$i.GamingOfferPage.gamesNames.push(this.$i.GamingOfferPage.currentGameName);
+        if (!this.$i.GamingOfferPage.gamesNames.includes(this.$i.GamingOfferPage.currentGameName)) {
+            this.$i.GamingOfferPage.gamesNames.push(this.$i.GamingOfferPage.currentGameName);
 
-                return currentOffer;
-            }
+            return currentOffer;
         }
 
         return false;
@@ -56,7 +54,9 @@ export default class GamingOpenOfferPage<PageType extends PageContract> extends 
 
         this.$i.GamingOfferPage.currentOffer = currentOffer;
 
-        switch (await currentOffer.getAttribute("data-a-target")) {
+        const currentOfferButton = currentOffer.locator(this.$s.OFFERS_CARDS.REDEEM_BUTTON);
+
+        switch (await currentOfferButton.getAttribute("data-a-target")) {
             case "DownloadAndPlay":
                 return true;
             case "FGWPOffer":
@@ -67,7 +67,7 @@ export default class GamingOpenOfferPage<PageType extends PageContract> extends 
 
         const [popup] = await Promise.all([
             this.page.context().waitForEvent("page", { timeout: 10000 }),
-            currentOffer.click({ timeout: 5000, button: "middle" }),
+            currentOffer.click({ timeout: 5000, button: "middle", force: true }),
         ]);
         return this.$i.GamingOfferPage.popup = popup;
     }
