@@ -63,9 +63,11 @@ export default class GamingRedeemHandler<PageType extends PageContract> extends 
     }
 
     private async saveTokenIfExists() {
-        if (!(await this.page.$(this.$$s.GamingRedeemSelector.REDEEM_MODAL.GAME_TOKEN))) return console.log("not has token");
+        const gameSelectors = this.$$s.GamingRedeemSelector;
+        const tokenSelector = `${gameSelectors.REDEEM_MODAL.MODAL_ELEMENT} ${gameSelectors.REDEEM_MODAL.GAME_TOKEN}`;
+        if (!(await this.page.$(tokenSelector))) return console.log("not has token");
 
-        const code = await this.page.inputValue(this.$$s.GamingRedeemSelector.REDEEM_MODAL.GAME_TOKEN, { timeout: 1000 });
+        const code = await this.page.inputValue(tokenSelector, { timeout: 1000 });
         const game = await this.page.$eval(this.$$s.GamingRedeemSelector.REDEEM_GAME_NAME_ELEMENT, (el: any) => el.innerText, {});
 
         appendFile("./game-codes.csv", `"${game}";"${code}"\r\n`, (err) => {
