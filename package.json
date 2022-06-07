@@ -30,7 +30,7 @@
     "@odg/essentials-crawler-node": "^0.1.0",
     "colors": "^1.4.0",
     "dotenv": "^12.0.4",
-    "playwright": "^1.21",
-    "playwright-core": "^1.21"
+    "playwright": "^1.22.0",
+    "playwright-core": "^1.22.0"
   }
 }
