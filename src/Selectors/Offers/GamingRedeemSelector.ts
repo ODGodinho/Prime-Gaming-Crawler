@@ -5,6 +5,7 @@ const GamingRedeemSelector = {
         REDEEM_BUTTON: "[data-test-selector='AvailableButton'], [data-a-target='AvailableButton']",
         REDEEM_MOBILE_BUTTON: "[data-test-selector='ExternalClaimCTALink'], [data-a-target='ExternalClaimCTALink']",
         REDEEM_EXTERNAL_BUTTON: "[data-test-selector='ExternalClaimCTALink'], [data-a-target='ExternalClaimCTALink']",
+        GAME_GET_BUTTON: "[data-a-target='gms-cta']",
     },
     REDEEM_MODAL: {
         MODAL_ELEMENT: "[data-a-target='gms-base-modal']",
