@@ -17,6 +17,7 @@ export default class GamingRedeemOrModalOfferHandler<PageType extends PageContra
         return Promise.race([
             this.identifyModalGame(),
             this.identifyRedeemPage(),
+            this.identifyModalGameClaim(),
         ]);
     }
 
@@ -34,8 +35,22 @@ export default class GamingRedeemOrModalOfferHandler<PageType extends PageContra
             .then(() => this.resolvedSolution.bind(this));
     }
 
+    public async identifyModalGameClaim() {
+        return this.page.waitForSelector(this.$$s.GamingRedeemSelector.REDEEM_CARDS.GAME_GET_BUTTON, { timeout: await this.defaultTimeout() })
+            .then(() => this.modalGameClaimSolution.bind(this));
+    }
+
     private async redeemPageSolution() {
         await this.$i.GamingRedeemPage.start();
+        return HandlerState.COMPLETED;
+    }
+
+    private async modalGameClaimSolution() {
+        await this.page.locator(this.$$s.GamingRedeemSelector.REDEEM_CARDS.GAME_GET_BUTTON)
+            .first()
+            .click({ timeout: await this.defaultTimeout() })
+            .catch(() => null);
+
         return HandlerState.COMPLETED;
     }
 
